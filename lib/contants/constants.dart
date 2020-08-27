@@ -1,0 +1,1 @@
+enum Screen { ADD, EDIT }
