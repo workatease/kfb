@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kfb/helpers/tools.dart';
 import 'package:kfb/helpers/ui.dart';
 import 'package:kfb/models/checkout_session.dart';
-import 'package:kfb/providers/cash_on_delivery.dart';
 import 'package:kfb/widgets/buttons.dart';
 
 class CheckoutPaymentTypePage extends StatefulWidget {

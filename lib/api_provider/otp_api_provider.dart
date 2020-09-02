@@ -52,7 +52,6 @@ class OtpApiProvider {
   Future<dynamic> verifyOtp(int mobileNumber, int otpToVerify) async {
     // Retrieve otp from local Storage
     SharedPref sharedPref = SharedPref();
-    String otp = (await sharedPref.read(_keyOtp) as String);
 
     String mobileNumberWithCountryCode = "91" + mobileNumber.toString();
     try {
@@ -82,7 +81,6 @@ class OtpApiProvider {
   Future<dynamic> verifyOtpOld(int mobileNumber, int otpToVerify) async {
     // Retrieve otp from local Storage
     SharedPref sharedPref = SharedPref();
-    String otp = sharedPref.read(_keyOtp);
 
     String mobileNumberWithCountryCode = "91" + mobileNumber.toString();
     try {

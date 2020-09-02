@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:kfb/config/woo_config.dart';
 import 'package:kfb/models/shipping_method.dart';
 import 'package:woocommerce_api/woocommerce_api.dart';
@@ -14,9 +15,9 @@ class ShippingMethodsApiProvider {
     return parsed.map<WSShipping>((json) => WSShipping.fromJson(json)).toList();
   }
 
-  Future<List<WSShipping>> getShippingMethods() async {
+  Future<List<dynamic>> getShippingMethods() async {
     final responseBody = await wooCommerceAPI.getAsync("shipping_methods/");
-    print(responseBody.toString());
-    return parseShippingMethods(responseBody);
+
+    return responseBody;
   }
 }

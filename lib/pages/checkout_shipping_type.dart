@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:kfb/api_provider/shipping_methods_api_provider.dart';
 import 'package:kfb/app_country_options.dart';
@@ -8,7 +7,6 @@ import 'package:kfb/helpers/tools.dart';
 import 'package:kfb/helpers/ui.dart';
 import 'package:kfb/models/checkout_session.dart';
 import 'package:kfb/models/customer_address.dart';
-import 'package:kfb/models/payload/order_wc.dart';
 import 'package:kfb/models/shipping_method.dart';
 import 'package:kfb/models/shipping_type.dart';
 import 'package:kfb/providers/cart_provider.dart';
@@ -49,119 +47,113 @@ class _CheckoutShippingTypePageState extends State<CheckoutShippingTypePage> {
   }
 
   _getShippingMethods() async {
-    List<WSShipping> wsShipping =
-        await _shippingMethodsApiProvider.getShippingMethods();
-    print(wsShipping.toSet());
+    final wsShipping = await _shippingMethodsApiProvider.getShippingMethods();
+
+    wsShipping.forEach((e) {
+      Map<String, dynamic> tmpShippingOption = {};
+      tmpShippingOption = {
+        "id": e['id'],
+        "title": e['title'],
+        "method_id": e['method_id'],
+        "cost": 0.toString(),
+        "object": e
+      };
+      _wsShippingOptions.add(tmpShippingOption);
+    });
+
+    print(_wsShippingOptions);
+
     CustomerAddress customerAddress =
         CheckoutSession.getInstance.billingDetails.shippingAddress;
     String postalCode = customerAddress.postalCode;
-    //String location = customerAddress.addressLine;
+    String location = customerAddress.addressLine;
     String country = customerAddress.country;
     String state = customerAddress.state;
     String countryCode = appCountryOptions
         .firstWhere((c) => c['name'] == country, orElse: () => null)["code"];
-    print(countryCode);
+
     Map<String, dynamic> stateMap = appStateOptions
         .firstWhere((c) => c['name'] == state, orElse: () => null);
-    log(stateMap.toString());
-    print(stateMap);
-    for (final shipping in wsShipping) {
-      //print(wsShipping);
-      Locations location = shipping.locations.firstWhere(
-          (ws) => (ws.type == "state" ||
-              stateMap["code"] != null && ws.code == "$countryCode:" ||
-              ws.code == postalCode ||
-              ws.code == countryCode), //this is the error point
-          orElse: () => null);
 
-      log(location.toString());
-      print("===============================$location");
-      if (location != null) {
-        _shipping = shipping;
-        break;
-      }
-    }
-    if (_shipping != null && _shipping.methods != null) {
-      if (_shipping.methods.flatRate != null) {
-        _shipping.methods.flatRate
-            .where((t) => t != null)
-            .toList()
-            .forEach((flatRate) {
-          Map<String, dynamic> tmpShippingOption = {};
-          tmpShippingOption = {
-            "id": flatRate.id,
-            "title": flatRate.title,
-            "method_id": "flat_rate",
-            "cost": flatRate.cost,
-            "object": flatRate
-          };
-          _wsShippingOptions.add(tmpShippingOption);
-        });
-      }
-      if (_shipping.methods.distanceRate != null) {
-        log("Distance rate shipping");
-        _shipping.methods.distanceRate
-            .where((t) => t != null)
-            .toList()
-            .forEach((distanceRate) {
-          Map<String, dynamic> tmpShippingOption = {};
-          tmpShippingOption = {
-            "id": distanceRate.id,
-            "title": distanceRate.title,
-            "method_id": "distance_rate",
-            "cost": distanceRate.cost,
-            "object": distanceRate
-          };
-          _wsShippingOptions.add(tmpShippingOption);
-        });
-      }
+    // if (_shipping != null && _shipping.methods != null) {
+    //   if (_shipping.methods.flatRate != null) {
+    //     _shipping.methods.flatRate
+    //         .where((t) => t != null)
+    //         .toList()
+    //         .forEach((flatRate) {
+    //       Map<String, dynamic> tmpShippingOption = {};
+    //       tmpShippingOption = {
+    //         "id": flatRate.id,
+    //         "title": flatRate.title,
+    //         "method_id": "flat_rate",
+    //         "cost": flatRate.cost,
+    //         "object": flatRate
+    //       };
+    //       _wsShippingOptions.add(tmpShippingOption);
+    //     });
+    //   }
+    //   if (_shipping.methods.distanceRate != null) {
+    //     log("Distance rate shipping");
+    //     _shipping.methods.distanceRate
+    //         .where((t) => t != null)
+    //         .toList()
+    //         .forEach((distanceRate) {
+    //       Map<String, dynamic> tmpShippingOption = {};
+    //       tmpShippingOption = {
+    //         "id": distanceRate.id,
+    //         "title": distanceRate.title,
+    //         "method_id": "distance_rate",
+    //         "cost": distanceRate.cost,
+    //         "object": distanceRate
+    //       };
+    //       _wsShippingOptions.add(tmpShippingOption);
+    //     });
+    //   }
 
-      if (_shipping.methods.localPickup != null) {
-        _shipping.methods.localPickup
-            .where((t) => t != null)
-            .toList()
-            .forEach((localPickup) {
-          Map<String, dynamic> tmpShippingOption = {};
-          tmpShippingOption = {
-            "id": localPickup.id,
-            "method_id": "local_pickup",
-            "title": localPickup.title,
-            "cost": localPickup.cost,
-            "object": localPickup
-          };
-          _wsShippingOptions.add(tmpShippingOption);
-        });
-      }
+    //   if (_shipping.methods.localPickup != null) {
+    //     _shipping.methods.localPickup
+    //         .where((t) => t != null)
+    //         .toList()
+    //         .forEach((localPickup) {
+    //       Map<String, dynamic> tmpShippingOption = {};
+    //       tmpShippingOption = {
+    //         "id": localPickup.id,
+    //         "method_id": "local_pickup",
+    //         "title": localPickup.title,
+    //         "cost": localPickup.cost,
+    //         "object": localPickup
+    //       };
+    //       _wsShippingOptions.add(tmpShippingOption);
+    //     });
+    //   }
 
-      if (_shipping.methods.freeShipping != null) {
-        _shipping.methods.freeShipping
-            .where((t) => t != null)
-            .toList()
-            .forEach((freeShipping) {
-          if (isNumeric(freeShipping.cost)) {
-            Map<String, dynamic> tmpShippingOption = {};
-            tmpShippingOption = {
-              "id": freeShipping.id,
-              "method_id": "free_shipping",
-              "title": freeShipping.title,
-              "cost": freeShipping.cost,
-              "object": freeShipping
-            };
-            _wsShippingOptions.add(tmpShippingOption);
-            // print(_wsShippingOptions);
-          }
-        });
-      }
-    }
+    //   if (_shipping.methods.freeShipping != null) {
+    //     _shipping.methods.freeShipping
+    //         .where((t) => t != null)
+    //         .toList()
+    //         .forEach((freeShipping) {
+    //       if (isNumeric(freeShipping.cost)) {
+    //         Map<String, dynamic> tmpShippingOption = {};
+    //         tmpShippingOption = {
+    //           "id": freeShipping.id,
+    //           "method_id": "free_shipping",
+    //           "title": freeShipping.title,
+    //           "cost": freeShipping.cost,
+    //           "object": freeShipping
+    //         };
+    //         _wsShippingOptions.add(tmpShippingOption);
+    //         // print(_wsShippingOptions);
+    //       }
+    //     });
+    // }
+    // }
 
-    if (_wsShippingOptions.length == 0) {
+    if (_wsShippingOptions.length != 0) {
       _isShippingSupported = true;
-      //_isShippingSupported = false;
     }
 
     setState(() {
       _isLoading = false;
-      //_isLoading = true; //chp false to true
     });
   }
 

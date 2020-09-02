@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kfb/api_provider/customers_api_provider.dart';
-import 'package:kfb/config/woo_config.dart';
 import 'package:kfb/helpers/tools.dart';
 import 'package:kfb/helpers/ui.dart';
 import 'package:kfb/models/response/customer.dart';
 import 'package:kfb/shared_pref.dart/sp_auth.dart';
 import 'package:kfb/shared_pref.dart/sp_user_id.dart';
 import 'package:kfb/widgets/buttons.dart';
-import 'package:woocommerce_api/woocommerce_api.dart';
 import 'package:wp_json_api/models/responses/wp_user_login_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 import 'package:wp_json_api/enums/wp_auth_type.dart';

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kfb/config/app_themes.dart';
 import 'package:kfb/config/woo_config.dart';
-import 'package:kfb/models/billing_details.dart';
 import 'package:kfb/models/response/order.dart';
 import 'package:kfb/models/woo_models.dart';
 import 'package:kfb/pages/about.dart';

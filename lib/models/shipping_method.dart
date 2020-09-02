@@ -9,15 +9,14 @@ class WSShipping {
   WSShipping.fromJson(Map<String, dynamic> json) {
     parentId = json['parent_id'];
     name = json['name'];
+
     if (json['locations'] != null) {
-      locations = new List<Locations>();
-      json['locations'].forEach((v) {
-        locations.add(new Locations.fromJson(v));
-        // print("This is in wsship class------>$locations");
-      });
+      json['locations'].forEach(
+        (v) => locations.add(Locations.fromJson(v)),
+      );
     }
     methods =
-        json['methods'] != null ? new Methods.fromJson(json['methods']) : null;
+        json['methods'] != null ? Methods.fromJson(json['methods']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +50,16 @@ class Locations {
     data['type'] = this.type;
     return data;
   }
+}
+
+class ShippingMethod {
+  FreeShipping freeShipping;
+  FlatRate flatRate;
+  LocalPickup localPickup;
+  DistanceRate distanceRate;
+
+  ShippingMethod(
+      {this.freeShipping, this.flatRate, this.localPickup, this.distanceRate});
 }
 
 class Methods {
