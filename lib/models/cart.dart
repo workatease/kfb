@@ -183,8 +183,6 @@ class Cart {
   }
 
   List<dynamic> cartCheck(List<Map<String, dynamic>> cartLines) {
-    SharedPref sharedPref = SharedPref();
-
     List<dynamic> payloadRsp = [];
 
     return payloadRsp;

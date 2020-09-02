@@ -331,7 +331,6 @@ class _AccountRegistrationPageState extends State<AccountRegistrationPage> {
         print("User Token: " + token);
 
         authUser(token);
-        int userId = wpUserRegisterResponse.data.userId;
         storeUserId(wpUserRegisterResponse.data.userId.toString());
 
         try {
